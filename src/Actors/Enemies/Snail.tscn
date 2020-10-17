@@ -25,12 +25,12 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=2]
-radius = 11.566
-height = 31.3102
+radius = 10.1235
+height = 39.1554
 
 [sub_resource type="CapsuleShape2D" id=3]
-radius = 3.77837
-height = 25.5749
+radius = 8.44814
+height = 34.2402
 
 [node name="Snail" type="KinematicBody2D"]
 collision_layer = 4
@@ -49,7 +49,7 @@ enabled = true
 cast_to = Vector2( 0, 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -1.96071, 4.42134 )
+position = Vector2( -1.29256, 5.98041 )
 rotation = 1.5708
 shape = SubResource( 2 )
 
@@ -58,7 +58,7 @@ collision_layer = 4
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopHitbox"]
-position = Vector2( -2.05949, -11.0529 )
+position = Vector2( -2.05946, -13.0574 )
 rotation = 1.57079
 shape = SubResource( 3 )
 [connection signal="body_entered" from="TopHitbox" to="." method="_on_TopHitbox_body_entered"]

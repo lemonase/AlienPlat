@@ -29,13 +29,17 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, FLOOR)
 
 
-func _on_TopHitbox_body_entered(body):
+func die():
 	$AnimatedSprite.play("dead")
 	$CollisionShape2D.disabled = true
-
 	set_collision_layer_bit(2, false)
 	set_collision_mask_bit(1, false)
-
 	$TopHitbox.set_collision_mask_bit(1, false)
 	$TopHitbox.set_collision_layer_bit(2, false)
 	SPEED = 0
+
+
+func _on_TopHitbox_body_entered(body):
+	die()
+	if body.name == "Player":
+		body.bounce()

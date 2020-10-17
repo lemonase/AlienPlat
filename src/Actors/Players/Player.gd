@@ -8,7 +8,7 @@ export(int) var SPEED_INC_RATE = 100
 
 # y speed
 export(int) var JUMP_FORCE = 400
-export(int) var HIT_FORCE = JUMP_FORCE * 2
+export(int) var HIT_FORCE = JUMP_FORCE * 3
 export(int) var GRAVITY = 10
 
 # constants
@@ -17,24 +17,37 @@ const FLOOR = Vector2(0, -1)
 # player velocity/direction
 var velocity = Vector2.ZERO
 var x_direction = 1
-var hit_timer
-
-# enemy
-const ENEMY_LAYER = 4
 
 # health
 export var health = 5
+var alive = true
+const ENEMY_LAYER = 4
+var hit_timer
+
 
 func _ready():
-	hit_timer = Timer.new()
-	hit_timer.connect("timeout", self, "on_hit_timer_timeout")
-	add_child(hit_timer)
+	scale = scale * .70
+	create_hit_timer()
 
 
 func _physics_process(_delta):
-	handle_input()
-	handle_collisions()
-	move_character()
+	if alive:
+		handle_input()
+		move_character()
+		check_collisions()
+		check_health()
+	else:
+		set_modulate(Color(0.1,0.1,0.1,.02))
+		velocity.x = 0
+		velocity.y = 0
+
+
+func create_hit_timer():
+	hit_timer = Timer.new()
+	hit_timer.connect("timeout", self, "on_hit_timer_timeout")
+	hit_timer.one_shot = true
+	add_child(hit_timer)
+
 
 # moves character
 func move_character():
@@ -43,19 +56,26 @@ func move_character():
 
 
 # emit collided signals
-func handle_collisions():
+func check_collisions():
 	for i in get_slide_count():
 		var c = get_slide_collision(i)
 		var layer = c.collider.get("collision_layer")
 
 		if layer == ENEMY_LAYER:
+			# print("Collision Layer: ", layer)
 			hit_timer.start()
-			velocity.x = HIT_FORCE * x_direction
-			health -= 1
 
 
 func handle_input():
 	# y-axis translation
+	check_up_and_down()
+
+	# x-axis and idle
+	check_left_or_right()
+
+
+# movement functions
+func check_up_and_down():
 	if Input.is_action_pressed("ui_up"):
 		velocity.y = -JUMP_FORCE
 	if Input.is_action_pressed("ui_down"):
@@ -65,17 +85,10 @@ func handle_input():
 	elif velocity.y > 0:
 		$AnimatedSprite.play("fall")
 
-	# x-axis and idle translation
-	if Input.is_action_pressed("ui_right") || Input.is_action_pressed("ui_left"):
-		left_or_right()
-	else:
-		stand_or_duck()
 
-
-# movement functions
-
-func left_or_right():
+func check_left_or_right():
 	if Input.is_key_pressed(KEY_SHIFT):
+	# shift = speed up
 		if CURRENT_SPEED <= MAX_SPEED:
 			CURRENT_SPEED += SPEED_INC_RATE
 			$AnimatedSprite.set_speed_scale(2)
@@ -85,6 +98,7 @@ func left_or_right():
 			$AnimatedSprite.set_speed_scale(1)
 
 	if Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left"):
+	# left or right = translation and walking animation
 		if is_on_floor():
 			$AnimatedSprite.play("walk")
 
@@ -97,15 +111,20 @@ func left_or_right():
 			$AnimatedSprite.set_flip_h(true)
 
 		velocity.x = CURRENT_SPEED * x_direction
+	else:
+	# down and no input = no movemnet
+		if is_on_floor():
+			if Input.is_action_pressed("ui_down"):
+				toggle_duck(true)
+			else:
+				toggle_duck(false)
+		velocity.x = 0
 
-# handle ducking
-func stand_or_duck():
-	if is_on_floor():
-		if Input.is_action_pressed("ui_down"):
-			toggle_duck(true)
-		else:
-			toggle_duck(false)
-	velocity.x = 0
+
+func check_health():
+	if health < 1:
+		alive = false
+		print("Game Over!")
 
 
 # toggle ducking animation
@@ -120,11 +139,22 @@ func toggle_duck(toggle):
 		$DuckingCollision.disabled = true
 
 
+func bounce():
+	set_modulate(Color(1.0,1.0,1.0,1.0))
+	velocity.y = -JUMP_FORCE * .7
+
+
 func on_hit_timer_timeout():
-	pass
+	hit(1)
+	$AnimatedSprite.play("hit")
+	hit_timer.stop()
+
 
 func hit(amount):
+	print("Health: ", health)
+	set_modulate(Color(1.0, 0.2, 0.2, 0.3))
 	health -= amount
+
 
 func heal(amount):
 	health += amount
