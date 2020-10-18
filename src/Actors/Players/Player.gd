@@ -35,7 +35,6 @@ func _physics_process(_delta):
 	if alive:
 		handle_input()
 		move_character()
-#		check_collisions()
 		check_health()
 	else:
 		set_modulate(Color(0.1,0.1,0.1,.02))
@@ -63,15 +62,6 @@ func move_character():
 	velocity = move_and_slide(velocity, FLOOR)
 
 
-# emit collided signals
-func check_collisions():
-	for i in get_slide_count():
-		var c = get_slide_collision(i)
-		var layer = c.collider.get("collision_layer")
-		if layer == ENEMY_LAYER:
-			hit_timer.start()
-
-
 func handle_input():
 	# y-axis translation
 	check_up_and_down()
@@ -88,8 +78,6 @@ func check_up_and_down():
 			velocity.y = JUMP_FORCE
 	if velocity.y < 0:
 		$AnimatedSprite.play("fall")
-#	elif velocity.y > 0:
-#		$AnimatedSprite.play("walk")
 
 
 func check_left_or_right():
