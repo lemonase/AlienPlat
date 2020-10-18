@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/actors/enemies/flyFly2.png" type="Texture" id=1]
 [ext_resource path="res://assets/actors/enemies/flyFly1.png" type="Texture" id=2]
@@ -7,24 +7,28 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 1 ) ],
-"loop": true,
-"name": "fly",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "dead",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "fly",
 "speed": 5.0
 } ]
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 9.08688
-height = 27.5095
+height = 15.8975
 
 [sub_resource type="CapsuleShape2D" id=3]
 radius = 6.58414
 height = 24.9578
+
+[sub_resource type="CapsuleShape2D" id=4]
+radius = 10.8919
+height = 33.4838
 
 [node name="Fly" type="KinematicBody2D"]
 collision_layer = 4
@@ -49,7 +53,17 @@ collision_layer = 4
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopHitbox"]
-position = Vector2( 2.06017, -9.73899 )
+position = Vector2( 2.80932, -12.9229 )
 rotation = 1.5708
 shape = SubResource( 3 )
+
+[node name="SideBottomHitbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SideBottomHitbox"]
+position = Vector2( 2.62203, 4.86948 )
+rotation = 1.57079
+shape = SubResource( 4 )
 [connection signal="body_entered" from="TopHitbox" to="." method="_on_TopHitbox_body_entered"]
+[connection signal="body_entered" from="SideBottomHitbox" to="." method="_on_SideBottomHitbox_body_entered"]

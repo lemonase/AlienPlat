@@ -2,7 +2,8 @@ extends KinematicBody2D
 
 const GRAVITY = 10
 const FLOOR = Vector2(0, -1)
-export var SPEED = 50
+export(int) var SPEED = 50
+export(int) var DAMAGE = 1
 
 var direction
 var velocity
@@ -44,3 +45,8 @@ func _on_TopHitbox_body_entered(body):
 	die()
 	if body.name == "Player":
 		body.bounce()
+
+
+func _on_SidesHitbox_body_entered(body):
+	if body.name == "Player":
+		body.hit(position.x, DAMAGE)

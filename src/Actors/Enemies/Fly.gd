@@ -3,8 +3,8 @@ extends KinematicBody2D
 var direction
 var velocity
 
-export var SPEED = 50
-
+export(int) var SPEED = 50
+export(int) var DAMAGE = 2
 
 func _ready():
 	direction = 1
@@ -25,10 +25,10 @@ func _physics_process(_delta):
 
 func die():
 	$AnimatedSprite.play("dead")
-	
+
 	if not is_on_floor():
 		velocity.y = SPEED
-	
+
 	$CollisionShape2D.disabled = true
 	set_collision_layer_bit(2, false)
 	set_collision_mask_bit(1, false)
@@ -41,3 +41,8 @@ func _on_TopHitbox_body_entered(body):
 	die()
 	if body.name == "Player":
 		body.bounce()
+
+
+func _on_SideBottomHitbox_body_entered(body):
+	if body.name == "Player":
+		body.hit(position.x, DAMAGE)
