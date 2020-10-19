@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/tick_004.ogg-45fca2552df6d93a3fba0b4031b04763.oggstr"
+
+[deps]
+
+source_file="res://assets/sounds/Interface/tick_004.ogg"
+dest_files=[ "res://.import/tick_004.ogg-45fca2552df6d93a3fba0b4031b04763.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

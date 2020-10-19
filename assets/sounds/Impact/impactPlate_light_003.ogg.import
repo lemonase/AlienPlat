@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/impactPlate_light_003.ogg-61220a628ee407f6768e6c26d10de80d.oggstr"
+
+[deps]
+
+source_file="res://assets/sounds/Impact/impactPlate_light_003.ogg"
+dest_files=[ "res://.import/impactPlate_light_003.ogg-61220a628ee407f6768e6c26d10de80d.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
